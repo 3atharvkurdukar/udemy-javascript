@@ -10,15 +10,26 @@
             console.log(this.question);
             for (var i = 0; i < this.answers.length; i++)
                 console.log(i + ")  " + this.answers[i]);
-            return userPrompt = prompt('Enter the correct option: ');
+            return prompt('Enter the correct option: ');
         }
-        checkQuestion(userPrompt) {
-            if (userPrompt == this.correct) {
+        checkQuestion(userPrompt, callback) {
+            var sc = 0;
+        
+            if (userPrompt === this.correct) {
                 console.log("Correct!");
+                sc = callback(true);
             }
             else {
                 console.log("Incorrect...!");
+                sc = callback(false);
             }
+
+            this.displayScore(sc);
+        }
+        displayScore(score) {
+            console.log('--------------------');
+            console.log('Score : ' + score);
+            console.log('--------------------');
         }
     };
     
@@ -35,20 +46,31 @@
     questions.push(new Question(
         "When was JavaScript invented?", ['1955', '1967', '1991'], 0
     ));
+
+    var score = function() {
+        var sc = 0;
+        return function(correct) {
+            if (correct) {
+                sc++;
+            }
+            return sc;
+        }
+    }
+
+    var keepScore = score();
     
-    //console.log(questions);
-    
-    do {
+    function nextQuetion() {
         var randomQuestion = questions[Math.floor((Math.random() * questions.length))];
     
         var userPrompt = randomQuestion.askQuestion();
-        if (userPrompt == 'exit') {
-            break;
+        if (userPrompt !== 'exit') {
+            randomQuestion.checkQuestion(parseInt(userPrompt), keepScore);
+            nextQuetion();
         }
-    
-        randomQuestion.checkQuestion(userPrompt);
-    } while (true);
-});
+    }
+
+    nextQuetion();
+})();
 
 
 
