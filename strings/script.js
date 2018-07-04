@@ -1,3 +1,10 @@
+// Lecture : Strings
+
+/**
+ * ES6 allows the use of string literals enclosed in `` when we want to 
+ * put variables and expressions in a string.
+ */
+
 let firstName = 'John';
 let lastName = 'Smaith';
 
